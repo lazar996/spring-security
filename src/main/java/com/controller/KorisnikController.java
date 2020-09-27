@@ -52,11 +52,9 @@ public class KorisnikController {
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         try {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    loginDTO.getUsername(), loginDTO.getPassword());
+            loginDTO.getUsername(), loginDTO.getPassword());
             Authentication authentication = authenticationManager.authenticate(token);
             UserDetails details = userDetailsService.loadUserByUsername(loginDTO.getUsername());
-            System.out.println(details.toString()+ "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-
             return new ResponseEntity<String>(tokenUtils.generateToken(details),
                     HttpStatus.OK);
         } catch (Exception ex) {
@@ -64,18 +62,4 @@ public class KorisnikController {
         }
     }
 
-    @CrossOrigin
-    @GetMapping("api/user")
-    public ResponseEntity<?> getAlla(){
-
-        System.out.println("uloga treeba da pise ispod");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Korisnik korisnik = korisnikRepo.findByKorisnickoIme(authentication.getName());
-
-        System.out.println("uloga" +korisnik.getTipKorisnika());
-        if(!korisnik.getTipKorisnika().equals("ucenik")){
-                return  new ResponseEntity<List<Korisnik>>(korisnikService.getAll(), HttpStatus.OK);
-
-    }else
-        return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-}}
+}
